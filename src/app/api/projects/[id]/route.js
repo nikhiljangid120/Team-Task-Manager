@@ -3,15 +3,16 @@ import connectDB from '@/lib/db';
 import Project from '@/models/Project';
 import { protect } from '@/lib/auth';
 
-export async function GET(request, { params }) {
+export async function GET(request, context) {
   try {
+    const { id } = await context.params;
     const user = protect(request);
     if (!user) {
       return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
     }
 
     await connectDB();
-    const project = await Project.findById(params.id).populate('createdBy', 'name email');
+    const project = await Project.findById(id).populate('createdBy', 'name email');
 
     if (!project) {
       return NextResponse.json({ message: 'Project not found' }, { status: 404 });
@@ -24,8 +25,9 @@ export async function GET(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   try {
+    const { id } = await context.params;
     const user = protect(request);
     if (!user) {
       return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
@@ -36,7 +38,7 @@ export async function DELETE(request, { params }) {
     }
 
     await connectDB();
-    const project = await Project.findByIdAndDelete(params.id);
+    const project = await Project.findByIdAndDelete(id);
 
     if (!project) {
       return NextResponse.json({ message: 'Project not found' }, { status: 404 });

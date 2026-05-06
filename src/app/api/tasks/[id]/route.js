@@ -3,15 +3,16 @@ import connectDB from '@/lib/db';
 import Task from '@/models/Task';
 import { protect } from '@/lib/auth';
 
-export async function PUT(request, { params }) {
+export async function PUT(request, context) {
   try {
+    const { id } = await context.params;
     const user = protect(request);
     if (!user) {
       return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
     }
 
     await connectDB();
-    let task = await Task.findById(params.id);
+    let task = await Task.findById(id);
 
     if (!task) {
       return NextResponse.json({ message: 'Task not found' }, { status: 404 });
@@ -32,7 +33,7 @@ export async function PUT(request, { params }) {
       }
     } else if (user.role === 'Admin') {
       // Admin can update anything
-      task = await Task.findByIdAndUpdate(params.id, body, {
+      task = await Task.findByIdAndUpdate(id, body, {
         new: true,
         runValidators: true,
       });
@@ -45,8 +46,9 @@ export async function PUT(request, { params }) {
   }
 }
 
-export async function DELETE(request, { params }) {
+export async function DELETE(request, context) {
   try {
+    const { id } = await context.params;
     const user = protect(request);
     if (!user) {
       return NextResponse.json({ message: 'Not authorized' }, { status: 401 });
@@ -57,7 +59,7 @@ export async function DELETE(request, { params }) {
     }
 
     await connectDB();
-    const task = await Task.findByIdAndDelete(params.id);
+    const task = await Task.findByIdAndDelete(id);
 
     if (!task) {
       return NextResponse.json({ message: 'Task not found' }, { status: 404 });
