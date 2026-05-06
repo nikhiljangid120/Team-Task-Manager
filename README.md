@@ -19,4 +19,7 @@ Hi there! This is my submission for the Ethara.AI Full-Stack assessment. I built
 3. Add your `MONGODB_URI` and a random string for `JWT_SECRET`.
 4. Run `npm run dev` and go to `http://localhost:3000`.
 
+## Deployment Note
+While the assignment requested deployment on Railway, my free trial for Railway (and Render) had unfortunately expired. Therefore, I chose to deploy this application on **Vercel**. Since Vercel is the creator and maintainer of Next.js, it provides the most optimized, seamless, and performant hosting environment for this specific tech stack.
+
 Thanks for reviewing my code!
